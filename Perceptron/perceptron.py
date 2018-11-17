@@ -5,6 +5,15 @@ class Sample:
         self.X = X
         self.y = y
 
+def print_weight(weight, num = 0):
+    S = "W{0} ==> ".format(num)
+    for idx, w in enumerate(weight):
+        if idx + 1 != len(weight): 
+            S += "w{0} = {1}, ".format(idx+1, w)
+        else:
+            S += "w{0} = {1} ".format(idx+1, w)
+    return S
+
 def perceptron_two_classes( samples, C, W):
     
     for sample in samples:
@@ -35,7 +44,8 @@ def perceptron_two_classes( samples, C, W):
         it+=1
 
     print("Done")
-    print("Final weights are: ", W)
+    print("Final weights are: ")
+    print(print_weight(W))
 
 def perceptron_N_classes( samples, C, W):
     
@@ -74,7 +84,9 @@ def perceptron_N_classes( samples, C, W):
             break
         it += 1
     print("Done")
-    print(W)
+    for idx, w in enumerate(W):
+        print(print_weight(w, idx))
+    
 
 def main():
 
