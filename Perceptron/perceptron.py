@@ -38,6 +38,7 @@ def perceptron_two_classes( samples, C, W):
     print("Final weights are: ", W)
 
 def perceptron_N_classes( samples, C, W):
+    
     for sample in samples:
         sample.X.append(1)
 
@@ -49,22 +50,43 @@ def perceptron_N_classes( samples, C, W):
         print("{0}th iteration\n\n".format(it))
         
         for idx, sample in enumerate(samples):
-            cls = -1
-            max_val = float("inf")
-            for i in range(len(num_of_classes)):
+            max_val = float("-inf")
+            for i in range((num_of_classes)):
                 val = np.dot(W[i], sample.X)
-
+                if val > max_val:
+                    max_val = val
+            found = False
+            for i in range((num_of_classes)):
+                val = np.dot(W[i], sample.X)
+                if val == max_val:
+                    if i != sample.y: #Wrong classification
+                        found = True
+                        num = 0
+                        W[i] = np.add(W[i], (-1)*C*np.array(sample.X))
+                        W[sample.y] = np.add(W[sample.y], C*sample.X)
+                        print("W{0} = W{1} -{2} * X{3}".format(i,i, C, idx+1))
+                        print("W{0} = W{1} + {2} * X{3}".format(sample.y, sample.y, C, idx+1))
+            if not found: 
+                num += 1
+            if num >= len(samples):
+                break
+        if num >= len(samples):
+            break
         it += 1
+    print("Done")
+    print(W)
 
 def main():
 
     C = 1
     samples = []
-    samples.append(Sample([0,0],1))
-    samples.append(Sample([1,0], 1))
-    samples.append(Sample([0,1],2))
+    samples.append(Sample([0,0],0))
+    samples.append(Sample([1,0], 0))
+    samples.append(Sample([0,1],1))
     W = [0,0,0]
-    perceptron_two_classes(samples, C, W)
+    W2 = [[0,0,0],[0,0,0]]
+    #perceptron_two_classes(samples, C, W)
+    perceptron_N_classes(samples, C, W2)
 
 
 if __name__ == "__main__":
